@@ -25,15 +25,21 @@ function ImagenetDataset:__init(imageInfo, opt, split)
    assert(paths.dirp(self.dir), 'directory does not exist: ' .. self.dir)
 end
 
+function GetPhotoID(url)
+   local id = string.match(url, "(%d+)%_")
+   return id
+end
+
 function ImagenetDataset:get(i)
    local path = ffi.string(self.imageInfo.imagePath[i]:data())
-
+   local id = GetPhotoID(path)
    local image = self:_loadImage(paths.concat(self.dir, path))
    local class = self.imageInfo.imageClass[i]
-
+   
    return {
       input = image,
       target = class,
+      id = id,
    }
 end
 

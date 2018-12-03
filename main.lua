@@ -51,6 +51,7 @@ for epoch = startEpoch, opt.nEpochs do
    -- Train for a single epoch
    local trainTop1, trainTop5, trainLoss = trainer:train(epoch, trainLoader)
 
+
    -- Run model on validation set
    local testTop1, testTop5 = trainer:test(epoch, valLoader)
 

@@ -78,6 +78,7 @@ function DataLoader:run()
                local sz = indices:size(1)
                local batch, imageSize
                local target = torch.IntTensor(sz)
+               local ids = {}
                for i, idx in ipairs(indices:totable()) do
                   local sample = _G.dataset:get(idx)
                   local input = _G.preprocess(sample.input)
@@ -87,12 +88,14 @@ function DataLoader:run()
                      batch = torch[cpuType](sz, nCrops, table.unpack(imageSize))
                   end
                   batch[i]:copy(input)
+                  ids[i] = sample.id
                   target[i] = sample.target
                end
                collectgarbage()
                return {
                   input = batch:view(sz * nCrops, table.unpack(imageSize)),
                   target = target,
+                  id = ids,
                }
             end,
             function(_sample_)
